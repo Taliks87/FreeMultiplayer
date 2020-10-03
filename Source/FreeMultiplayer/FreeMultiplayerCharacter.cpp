@@ -53,8 +53,8 @@ void AFreeMultiplayerCharacter::SetupPlayerInputComponent(class UInputComponent*
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
-	/*PlayerInputComponent->BindAxis("MoveForward", this, &AFreeMultiplayerCharacter::MoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &AFreeMultiplayerCharacter::MoveRight);*/
+	PlayerInputComponent->BindAxis("MoveForward", this, &AFreeMultiplayerCharacter::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &AFreeMultiplayerCharacter::MoveRight);
 
 	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
 	// "turn" handles devices that provide an absolute delta, such as a mouse.

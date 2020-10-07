@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "FreeMultiplayerCharacter.h"
+#include "FMCharacter.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -10,12 +10,12 @@
 #include "GameFramework/SpringArmComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
-// AFreeMultiplayerCharacter
+// AFMCharacter
 
-AFreeMultiplayerCharacter::AFreeMultiplayerCharacter()
+AFMCharacter::AFMCharacter()
 {
 	// Set size for collision capsule
-	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);	
+	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
@@ -46,24 +46,24 @@ AFreeMultiplayerCharacter::AFreeMultiplayerCharacter()
 //////////////////////////////////////////////////////////////////////////
 // Input
 
-void AFreeMultiplayerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
+void AFMCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
-	PlayerInputComponent->BindAxis("MoveForward", this, &AFreeMultiplayerCharacter::MoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &AFreeMultiplayerCharacter::MoveRight);
+	PlayerInputComponent->BindAxis("MoveForward", this, &AFMCharacter::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &AFMCharacter::MoveRight);
 
 	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
 	// "turn" handles devices that provide an absolute delta, such as a mouse.
 	// "turnrate" is for devices that we choose to treat as a rate of change, such as an analog joystick
-	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);	
-	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);	
+	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
+	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 }
 
-void AFreeMultiplayerCharacter::MoveForward(float Value)
+void AFMCharacter::MoveForward(float Value)
 {
 	if ((Controller != NULL) && (Value != 0.0f))
 	{
@@ -77,14 +77,14 @@ void AFreeMultiplayerCharacter::MoveForward(float Value)
 	}
 }
 
-void AFreeMultiplayerCharacter::MoveRight(float Value)
+void AFMCharacter::MoveRight(float Value)
 {
-	if ( (Controller != NULL) && (Value != 0.0f) )
+	if ((Controller != NULL) && (Value != 0.0f))
 	{
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
-	
+
 		// get right vector 
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		// add movement in that direction
